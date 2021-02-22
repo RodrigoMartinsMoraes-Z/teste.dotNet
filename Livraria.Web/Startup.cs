@@ -59,7 +59,12 @@ namespace Livraria.Web
             services.AddRazorPages().AddNewtonsoftJson();
 
             services.AddDbContext<IContextoDeDados, ContextoDeDados>(options =>
-             options.UseSqlServer(Configuration.GetConnectionString("BancoDeDados")), ServiceLifetime.Scoped);
+                     options
+                     .UseLazyLoadingProxies()
+                     .UseNpgsql(
+                         Configuration.GetConnectionString("LivrariaDb")),
+                        ServiceLifetime.Scoped
+                        );
 
             services.AddSimpleInjector(_container, options =>
             {

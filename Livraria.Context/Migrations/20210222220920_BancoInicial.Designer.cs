@@ -2,36 +2,36 @@
 using Livraria.Context;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Microsoft.EntityFrameworkCore.Metadata;
 using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Livraria.Context.Migrations
 {
     [DbContext(typeof(ContextoDeDados))]
-    [Migration("20210105220345_Seeder")]
-    partial class Seeder
+    [Migration("20210222220920_BancoInicial")]
+    partial class BancoInicial
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .UseIdentityColumns()
-                .HasAnnotation("Relational:MaxIdentifierLength", 128)
-                .HasAnnotation("ProductVersion", "5.0.1");
+                .HasAnnotation("Relational:MaxIdentifierLength", 63)
+                .HasAnnotation("ProductVersion", "5.0.3")
+                .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
             modelBuilder.Entity("Livraria.Domain.Livros.Livro", b =>
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Setor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<string>("Titulo")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -42,11 +42,11 @@ namespace Livraria.Context.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Valor")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -56,10 +56,10 @@ namespace Livraria.Context.Migrations
             modelBuilder.Entity("Livraria.Domain.ManyToMany.AutorLivro", b =>
                 {
                     b.Property<int>("IdLivro")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("IdAutor")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("IdLivro", "IdAutor");
 
@@ -71,10 +71,10 @@ namespace Livraria.Context.Migrations
             modelBuilder.Entity("Livraria.Domain.ManyToMany.LivroTema", b =>
                 {
                     b.Property<int>("IdLivro")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<int>("IdTema")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.HasKey("IdLivro", "IdTema");
 
@@ -87,11 +87,11 @@ namespace Livraria.Context.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Nome")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
@@ -109,31 +109,30 @@ namespace Livraria.Context.Migrations
                 {
                     b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .UseIdentityColumn();
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
                     b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.Property<int>("IdPessoa")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Login")
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("text");
 
                     b.Property<int>("Permissao")
-                        .HasColumnType("int");
+                        .HasColumnType("integer");
 
                     b.Property<string>("Senha")
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("text");
 
                     b.HasKey("Id");
 
                     b.HasIndex("IdPessoa");
 
                     b.HasIndex("Login")
-                        .IsUnique()
-                        .HasFilter("[Login] IS NOT NULL");
+                        .IsUnique();
 
                     b.ToTable("Usuarios");
 

@@ -1,4 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
+using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace Livraria.Context.Migrations
 {
@@ -10,10 +11,10 @@ namespace Livraria.Context.Migrations
                 name: "Livros",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Titulo = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Setor = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Titulo = table.Column<string>(type: "text", nullable: true),
+                    Setor = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -24,9 +25,9 @@ namespace Livraria.Context.Migrations
                 name: "Pessoas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Nome = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Nome = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -37,9 +38,9 @@ namespace Livraria.Context.Migrations
                 name: "Temas",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    Valor = table.Column<string>(type: "nvarchar(max)", nullable: true)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    Valor = table.Column<string>(type: "text", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -50,8 +51,8 @@ namespace Livraria.Context.Migrations
                 name: "AutoresLivros",
                 columns: table => new
                 {
-                    IdAutor = table.Column<int>(type: "int", nullable: false),
-                    IdLivro = table.Column<int>(type: "int", nullable: false)
+                    IdAutor = table.Column<int>(type: "integer", nullable: false),
+                    IdLivro = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -74,13 +75,13 @@ namespace Livraria.Context.Migrations
                 name: "Usuarios",
                 columns: table => new
                 {
-                    Id = table.Column<int>(type: "int", nullable: false)
-                        .Annotation("SqlServer:Identity", "1, 1"),
-                    IdPessoa = table.Column<int>(type: "int", nullable: false),
-                    Email = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Login = table.Column<string>(type: "nvarchar(450)", nullable: true),
-                    Senha = table.Column<string>(type: "nvarchar(max)", nullable: true),
-                    Permissao = table.Column<int>(type: "int", nullable: false)
+                    Id = table.Column<int>(type: "integer", nullable: false)
+                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    IdPessoa = table.Column<int>(type: "integer", nullable: false),
+                    Email = table.Column<string>(type: "text", nullable: true),
+                    Login = table.Column<string>(type: "text", nullable: true),
+                    Senha = table.Column<string>(type: "text", nullable: true),
+                    Permissao = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -97,8 +98,8 @@ namespace Livraria.Context.Migrations
                 name: "LivrosTemas",
                 columns: table => new
                 {
-                    IdLivro = table.Column<int>(type: "int", nullable: false),
-                    IdTema = table.Column<int>(type: "int", nullable: false)
+                    IdLivro = table.Column<int>(type: "integer", nullable: false),
+                    IdTema = table.Column<int>(type: "integer", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -116,6 +117,16 @@ namespace Livraria.Context.Migrations
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.InsertData(
+                table: "Pessoas",
+                columns: new[] { "Id", "Nome" },
+                values: new object[] { 1, "Administrador" });
+
+            migrationBuilder.InsertData(
+                table: "Usuarios",
+                columns: new[] { "Id", "Email", "IdPessoa", "Login", "Permissao", "Senha" },
+                values: new object[] { 1, "teste@123", 1, "admin", 1, "gqefEbSstSpkLvfjOd/OSqkv9l7S56twLXmNvhDsoLg=" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_AutoresLivros_IdAutor",
@@ -136,8 +147,7 @@ namespace Livraria.Context.Migrations
                 name: "IX_Usuarios_Login",
                 table: "Usuarios",
                 column: "Login",
-                unique: true,
-                filter: "[Login] IS NOT NULL");
+                unique: true);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
